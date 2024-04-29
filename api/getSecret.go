@@ -3,12 +3,13 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"net/url"
 
 	sm "github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	log "github.com/sirupsen/logrus"
 )
 
-func GetSecretByIDField(arn, field string) interface{} {
+func GetSecretByIDField(arn, field string, uriEncoded bool) interface{} {
 	client := sm.NewFromConfig(getCfg())
 	output, err := client.GetSecretValue(context.TODO(),
 		&sm.GetSecretValueInput{
@@ -40,6 +41,10 @@ func GetSecretByIDField(arn, field string) interface{} {
 			"id":     arn,
 			"field":  field,
 		}).Fatalf("cannot find field %s in secret %s", field, arn)
+	}
+
+	if strValue, isString := value.(string); isString && uriEncoded {
+		value = url.QueryEscape(strValue)
 	}
 
 	return value

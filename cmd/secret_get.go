@@ -28,7 +28,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		run(args)
+		runGetSecret(args)
 	},
 }
 
@@ -37,7 +37,7 @@ func init() {
 	getSecretCmd.Flags().BoolVarP(&copySecret, "copy", "c", false, `To copy the value to the clipboard.`)
 }
 
-func run(args []string) {
+func runGetSecret(args []string) {
 	arn := args[0]
 	field := "password"
 
@@ -49,7 +49,7 @@ func run(args []string) {
 		field = args[1]
 	}
 
-	var value = api.GetSecretByIDField(arn, field)
+	var value = api.GetSecretByIDField(arn, field, isURIEncoded)
 
 	if copySecret {
 		err := clipboard.Init()

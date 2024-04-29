@@ -24,12 +24,16 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
+const LOCAL_FOLDER_NAME = ".ame"
+const CONFIG_FILE_NAME = ".config"
+
+var localFolder string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -62,7 +66,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.aws.me.yaml)")
+	rootCmd.PersistentFlags().StringVar(&localFolder, "config", "", fmt.Sprintf("local data folder (default is $HOME/%s)", LOCAL_FOLDER_NAME))
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -71,18 +75,22 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" {
+	if localFolder != "" {
 		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
+		viper.SetConfigFile(path.Join(localFolder, CONFIG_FILE_NAME))
 	} else {
 		// Find home directory.
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".aws.me" (without extension).
-		viper.AddConfigPath(home)
+		localFolder = path.Join(home, LOCAL_FOLDER_NAME)
+		if _, err := os.Stat(localFolder); os.IsNotExist(err) {
+			os.MkdirAll(localFolder, os.ModePerm)
+		}
+		// Search config in local data folder with name ".config" (without extension).
+		viper.AddConfigPath(localFolder)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".aws.me")
+		viper.SetConfigName(".config")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

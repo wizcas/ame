@@ -1,6 +1,5 @@
 /*
 Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -8,6 +7,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+)
+
+var (
+	isURIEncoded bool
 )
 
 // secretCmd represents the secret command
@@ -37,4 +40,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// secretCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	secretCmd.PersistentFlags().BoolVarP(&isURIEncoded, "uri", "u", false, "Whether to retrieve URI encoded secrets.")
 }
