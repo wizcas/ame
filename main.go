@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/wizcas/aws.me/cmd"
+import "github.com/wizcas/ame/cmd"
 
 func main() {
 	cmd.Execute()

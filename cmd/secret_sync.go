@@ -1,6 +1,5 @@
 /*
 Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -10,8 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// syncCmd represents the sync command
-var syncCmd = &cobra.Command{
+// syncSecretCmd represents the sync command
+var syncSecretCmd = &cobra.Command{
 	Use:   "sync",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -26,7 +25,7 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	secretCmd.AddCommand(syncCmd)
+	secretCmd.AddCommand(syncSecretCmd)
 
 	// Here you will define your flags and configuration settings.
 
